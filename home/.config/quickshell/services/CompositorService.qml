@@ -150,7 +150,7 @@ Singleton {
     // The store first: Hyprland's answer lags a push, and a quick second
     // press would cycle from the old value.
     readonly property string windowLayout:
-        root.store?.["general:layout"] ?? root.value("general:layout", "dwindle")
+        root.store?.["general:layout"] ?? root.value("general:layout", "scrolling")
 
     function cycleLayout(): void {
         const ids = root.windowLayouts.map(entry => entry.id)

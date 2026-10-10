@@ -81,7 +81,7 @@ RowLayout {
     }
 
     Text {
-        Layout.preferredWidth: 66
+        Layout.preferredWidth: 84
         horizontalAlignment: Text.AlignRight
         text: root.note !== "" ? root.note : root.when
         elide: Text.ElideRight

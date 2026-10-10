@@ -90,16 +90,24 @@ Item {
                 }
             }
 
-            Text {
+            Item {
                 visible: root.is12h
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: Math.round(root.flipSize * 0.1)
-                text: root.ampm
-                font.family: Theme.fontDisplay
-                font.pixelSize: Math.round(root.flipSize * 0.22)
-                font.weight: Font.Bold
-                color: Theme.text
-                opacity: 0.55
+                implicitWidth: ampmFlipLabel.implicitWidth
+                implicitHeight: root.flipSize
+                width: implicitWidth
+                height: implicitHeight
+
+                Text {
+                    id: ampmFlipLabel
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: Math.round(root.flipSize * 0.1)
+                    text: root.ampm
+                    font.family: Theme.fontDisplay
+                    font.pixelSize: Math.round(root.flipSize * 0.22)
+                    font.weight: Font.Bold
+                    color: Theme.text
+                    opacity: 0.55
+                }
             }
         }
 
@@ -138,6 +146,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 implicitWidth: minuteText.implicitWidth
                 implicitHeight: minuteText.implicitHeight
+                width: implicitWidth
+                height: implicitHeight
 
                 Text {
                     id: minuteText

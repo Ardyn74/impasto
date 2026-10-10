@@ -60,6 +60,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 implicitWidth: minuteText.implicitWidth
                 implicitHeight: minuteText.implicitHeight
+                width: implicitWidth
+                height: implicitHeight
 
                 Text {
                     id: minuteText
