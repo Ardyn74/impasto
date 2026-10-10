@@ -1040,7 +1040,7 @@ stamp()   { if (( ! DRY )); then mkdir -p "$APPLIED"; touch "$APPLIED/$1"; fi; }
 extras() {
     applied defaults || soft defaults verb_defaults
     if [[ ! -d $CURSOR_SEED ]]; then soft cursors verb_cursors; fi
-    applied thunar || soft thunar verb_thunar
+    # applied thunar || soft thunar verb_thunar
     applied vscodium || soft vscodium verb_vscodium
     applied vesktop || soft vesktop verb_vesktop
     applied face || soft face verb_face
@@ -1054,7 +1054,7 @@ extras() {
 DEFAULT_APPS=(
     'imv.desktop image/jpeg image/png image/gif image/webp image/svg+xml'
     'nvim.desktop text/plain application/json'
-    'thunar.desktop inode/directory'
+    'org.gnome.Nautilus.desktop inode/directory'
     'zen.desktop text/html application/pdf x-scheme-handler/http x-scheme-handler/https'
 )
 
@@ -1466,7 +1466,7 @@ parts() {
                 packages) note="$pacman from the repositories, $aur from the AUR" ;;
                 system)   note='sddm, unless this machine already has one' ;;
                 plugins)  note='shake to find · glass on the windows' ;;
-                extras)   note='Thunar, VSCodium, Vesktop, Spotify, GTK, your face' ;;
+                extras)   note='cursor, GTK, default applications' ;;
             esac
             if (( on[i] )); then box="$ACCENT◉$OFF"; else box="$FAINT○$OFF"; fi
             if (( i == at )); then

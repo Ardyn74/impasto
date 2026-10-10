@@ -76,7 +76,7 @@
     "dockAutohide": false,
     "dockPinned": [
       "kitty.desktop",
-      "thunar.desktop"
+      "org.gnome.Nautilus.desktop"
     ],
     "greeting": "koi",
     "wallpaperTransition": "circle",
