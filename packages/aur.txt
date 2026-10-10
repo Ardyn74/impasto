@@ -14,32 +14,32 @@
 
 # ── CURSOR ──────────────────────────────────────────────────────────────────
 
-bibata-cursor-theme-bin      # the XCursor env.lua names, for clients with no hyprcursor
+# bibata-cursor-theme-bin      # the XCursor env.lua names, for clients with no hyprcursor
 
 
 # ── WALLPAPER ───────────────────────────────────────────────────────────────
 
-mpvpaper                     # plays an animated wallpaper
+# mpvpaper                     # plays an animated wallpaper
 
 
 # ── CAPTURE ─────────────────────────────────────────────────────────────────
 
-wl-screenrec                 # the recorder's GPU encoder, tried before wf-recorder
+# wl-screenrec                 # the recorder's GPU encoder, tried before wf-recorder
 
 
 # ── TERMINAL PROGRAMS ───────────────────────────────────────────────────────
 
-unimatrix-git                # the matrix alias
-cbonsai                      # the bonsai alias
-tty-clock                    # the clock alias
-lavat                        # the lava function
+# unimatrix-git                # the matrix alias
+# cbonsai                      # the bonsai alias
+# tty-clock                    # the clock alias
+# lavat                        # the lava function
 
 
 # ── THEMED APPLICATIONS ─────────────────────────────────────────────────────
 
 # vscodium-bin                 # extensions and settings · ./setup vscodium
 # zen-browser-bin
-vesktop-bin
+# vesktop-bin
 # spotify
 # spicetify-cli                # applies the palette to Spotify · ./setup spotify
 
