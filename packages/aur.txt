@@ -37,16 +37,16 @@ lavat                        # the lava function
 
 # ── THEMED APPLICATIONS ─────────────────────────────────────────────────────
 
-vscodium-bin                 # extensions and settings · ./setup vscodium
-zen-browser-bin
+# vscodium-bin                 # extensions and settings · ./setup vscodium
+# zen-browser-bin
 vesktop-bin
-spotify
-spicetify-cli                # applies the palette to Spotify · ./setup spotify
+# spotify
+# spicetify-cli                # applies the palette to Spotify · ./setup spotify
 
 
 # ── VIRTUAL MACHINES ────────────────────────────────────────────────────────
 
-quickemu                     # the machines panel · brings quickget, spicy and OVMF
+# quickemu                     # the machines panel · brings quickget, spicy and OVMF
 
 
 # ── FACE UNLOCK ─────────────────────────────────────────────────────────────

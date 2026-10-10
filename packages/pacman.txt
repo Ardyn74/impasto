@@ -150,7 +150,7 @@ v4l-utils                    # v4l2-ctl, which ./setup face and Settings find th
 
 # ── VIRTUAL MACHINES ────────────────────────────────────────────────────────
 
-qemu-desktop                 # the qemu quickemu runs · quickemu is from the AUR
+# qemu-desktop                 # the qemu quickemu runs · quickemu is from the AUR
 
 
 # ── DEVELOPMENT ─────────────────────────────────────────────────────────────
