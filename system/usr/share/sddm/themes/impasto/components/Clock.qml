@@ -23,6 +23,8 @@ Item {
 
     implicitWidth: column.implicitWidth
     implicitHeight: column.implicitHeight
+    width: implicitWidth
+    height: implicitHeight
 
     Column {
         id: column

@@ -49,6 +49,8 @@ Item {
 
     implicitWidth: column.implicitWidth
     implicitHeight: column.implicitHeight
+    width: implicitWidth
+    height: implicitHeight
 
     SystemClock {
         id: clock
