@@ -364,8 +364,14 @@ Singleton {
     // Resting width. Alone, the time keeps the catalogue width; with
     // activities it shrinks to fit and each side gets a slot. One activity
     // splits across both sides (mark left, figure right); two take one each.
-    readonly property int clockCore: SettingsService.clockShowsDate
-        ? 150 : (SettingsService.clockShowsSeconds ? 88 : 72)
+    readonly property int clockCore: {
+        var is12h = SettingsService.clockFormat.indexOf("AP") !== -1 || SettingsService.clockFormat.indexOf("ap") !== -1
+        if (SettingsService.clockShowsDate)
+            return is12h ? 180 : 150
+        if (SettingsService.clockShowsSeconds)
+            return is12h ? 120 : 88
+        return is12h ? 100 : 72
+    }
     readonly property int activitySide: {
         if (root.activities.length > 1)
             return 92

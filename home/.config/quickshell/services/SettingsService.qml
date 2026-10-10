@@ -483,7 +483,7 @@ Singleton {
     // Declared once, instantiated twice: `config` is read from the file and
     // `pristine` holds the defaults.
     component Store: JsonAdapter {
-        property string clockFormat: "HH:mm"
+        property string clockFormat: "hh:mm AP"
         property bool clockShowsDate: false
         property bool clockShowsSeconds: false
 

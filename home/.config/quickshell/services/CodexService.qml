@@ -69,7 +69,7 @@ Singleton {
         const when = minutes <= 0 ? "renewed"
             : minutes < 60 ? `resets in ${minutes} min`
             : minutes < 24 * 60 ? `resets in ${Math.floor(minutes / 60)} h`
-            : `resets ${Qt.formatDateTime(new Date(Math.round(limit.resets / 60) * 60000), "ddd HH:mm")}`
+            : `resets ${Qt.formatDateTime(new Date(Math.round(limit.resets / 60) * 60000), "ddd " + SettingsService.clockFormat)}`
         return `${limit.name.toLowerCase()} · ${when}`
     }
 

@@ -12,6 +12,7 @@ import QtQuick.Layouts
 import Quickshell
 
 import "../theme"
+import "../services"
 
 // A share of something that renews: a usage window, a charge. An unknown
 // share is a dash and an empty bar, never 0 %. `resets` (epoch seconds) is
@@ -39,7 +40,7 @@ RowLayout {
         if (minutes < 24 * 60)
             return `${Math.floor(minutes / 60)} h ${String(minutes % 60).padStart(2, "0")}`
         // To the nearest minute: a window ends at 16:59:59.
-        return Qt.formatDateTime(new Date(Math.round(root.resets / 60) * 60000), "ddd HH:mm")
+        return Qt.formatDateTime(new Date(Math.round(root.resets / 60) * 60000), "ddd " + SettingsService.clockFormat)
     }
 
     SystemClock {

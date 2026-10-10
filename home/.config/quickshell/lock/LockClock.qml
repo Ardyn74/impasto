@@ -39,9 +39,13 @@ Item {
     readonly property int stackedGap: 18
 
     readonly property date now: root.at !== null ? root.at : clock.date
+    readonly property bool is12h: SettingsService.clockFormat.indexOf("AP") !== -1 || SettingsService.clockFormat.indexOf("ap") !== -1
+    readonly property string hour: is12h ? Qt.formatDateTime(root.now, "hh") : Qt.formatDateTime(root.now, "HH")
+    readonly property string minute: Qt.formatDateTime(root.now, "mm")
+    readonly property string ampm: is12h ? Qt.formatDateTime(root.now, "AP") : ""
     // The clock's own format, split on its separator for the stacked form.
     readonly property string time: Qt.formatDateTime(root.now, SettingsService.clockFormat)
-    readonly property var parts: root.time.split(":")
+    readonly property var parts: [root.hour, root.minute]
 
     implicitWidth: column.implicitWidth
     implicitHeight: column.implicitHeight
@@ -85,6 +89,18 @@ Item {
                     size: root.flipSize
                 }
             }
+
+            Text {
+                visible: root.is12h
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: Math.round(root.flipSize * 0.1)
+                text: root.ampm
+                font.family: Theme.fontDisplay
+                font.pixelSize: Math.round(root.flipSize * 0.22)
+                font.weight: Font.Bold
+                color: Theme.text
+                opacity: 0.55
+            }
         }
 
         Text {
@@ -92,7 +108,7 @@ Item {
             visible: !root.stacked && !root.flip
             text: root.time
             font.family: Theme.fontDisplay
-            font.pixelSize: root.inlineSize
+            font.pixelSize: root.is12h ? Math.round(root.inlineSize * 0.72) : root.inlineSize
             font.weight: Font.DemiBold
             font.letterSpacing: -Math.round(root.inlineSize * 0.033)
             font.features: { "tnum": 1 }
@@ -109,7 +125,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.parts[0] ?? ""
+                text: root.hour
                 font.family: Theme.fontDisplay
                 font.pixelSize: root.stackedSize
                 font.weight: Font.Bold
@@ -118,16 +134,36 @@ Item {
                 color: Theme.text
             }
 
-            Text {
+            Item {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.parts.slice(1).join(":")
-                font.family: Theme.fontDisplay
-                font.pixelSize: root.stackedSize
-                font.weight: Font.Bold
-                font.letterSpacing: -Math.round(root.stackedSize * 0.04)
-                font.features: { "tnum": 1 }
-                color: Theme.text
-                opacity: 0.55
+                implicitWidth: minuteText.implicitWidth
+                implicitHeight: minuteText.implicitHeight
+
+                Text {
+                    id: minuteText
+                    anchors.centerIn: parent
+                    text: root.minute
+                    font.family: Theme.fontDisplay
+                    font.pixelSize: root.stackedSize
+                    font.weight: Font.Bold
+                    font.letterSpacing: -Math.round(root.stackedSize * 0.04)
+                    font.features: { "tnum": 1 }
+                    color: Theme.text
+                    opacity: 0.55
+                }
+
+                Text {
+                    visible: root.is12h
+                    anchors.left: minuteText.right
+                    anchors.leftMargin: 16
+                    anchors.baseline: minuteText.baseline
+                    text: root.ampm
+                    font.family: Theme.fontDisplay
+                    font.pixelSize: Math.round(root.stackedSize * 0.22)
+                    font.weight: Font.Bold
+                    color: Theme.text
+                    opacity: 0.55
+                }
             }
         }
     }

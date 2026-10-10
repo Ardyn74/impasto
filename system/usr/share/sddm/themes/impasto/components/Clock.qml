@@ -47,7 +47,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: Qt.formatDateTime(root.now, "HH")
+                text: Qt.formatDateTime(root.now, "hh")
                 font.family: Theme.fontDisplay
                 font.pixelSize: Theme.fontSizeClock
                 font.weight: Font.Bold
@@ -56,16 +56,35 @@ Item {
                 color: Theme.text
             }
 
-            Text {
+            Item {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: Qt.formatDateTime(root.now, "mm")
-                font.family: Theme.fontDisplay
-                font.pixelSize: Theme.fontSizeClock
-                font.weight: Font.Bold
-                font.letterSpacing: -Math.round(Theme.fontSizeClock * 0.04)
-                font.features: { "tnum": 1 }
-                color: Theme.text
-                opacity: 0.55
+                implicitWidth: minuteText.implicitWidth
+                implicitHeight: minuteText.implicitHeight
+
+                Text {
+                    id: minuteText
+                    anchors.centerIn: parent
+                    text: Qt.formatDateTime(root.now, "mm")
+                    font.family: Theme.fontDisplay
+                    font.pixelSize: Theme.fontSizeClock
+                    font.weight: Font.Bold
+                    font.letterSpacing: -Math.round(Theme.fontSizeClock * 0.04)
+                    font.features: { "tnum": 1 }
+                    color: Theme.text
+                    opacity: 0.55
+                }
+
+                Text {
+                    anchors.left: minuteText.right
+                    anchors.leftMargin: 16
+                    anchors.baseline: minuteText.baseline
+                    text: Qt.formatDateTime(root.now, "AP")
+                    font.family: Theme.fontDisplay
+                    font.pixelSize: Math.round(Theme.fontSizeClock * 0.22)
+                    font.weight: Font.Bold
+                    color: Theme.text
+                    opacity: 0.55
+                }
             }
         }
     }

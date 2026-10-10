@@ -18,6 +18,7 @@
     ],
     "chipShape": "icon",
     "chipFigure": "off",
+    "clockFormat": "hh:mm AP",
     "clockShowsDate": true,
     "desktopTheme": "analogue",
     "desktopOpacity": 60,

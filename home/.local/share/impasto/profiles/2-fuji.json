@@ -24,6 +24,7 @@
     ],
     "chipShape": "icon",
     "chipFigure": "off",
+    "clockFormat": "hh:mm AP",
     "desktopTheme": "modern",
     "desktopOpacity": 75,
     "desktopWidgets": [
