@@ -252,12 +252,16 @@ Scope {
         target: "panel"
 
         readonly property var names: ["launcher", "controls", "overview", "appearance", "palette",
-            "stats", "session", "pet", "games", "notes", "board", "keys", "packages",
+            "stats", "session", "pet", "games", "notes", "board", "media", "keys", "packages",
             "machines", "wifi", "bluetooth", "sound", "microphone", "brightness", "nightlight"]
 
         function open(name: string): string {
             if (names.indexOf(name) < 0)
                 return root.fail(`not a panel: "${name}" (${names.join(", ")})`)
+            if (name === "media") {
+                ModuleService.activate("media")
+                return root.ok({ panel: name })
+            }
             root.island?.open(name)
             return root.ok({ panel: name })
         }

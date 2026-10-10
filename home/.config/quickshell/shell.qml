@@ -412,6 +412,12 @@ ShellRoot {
     }
 
     GlobalShortcut {
+        name: "media"
+        description: "Open the media player"
+        onPressed: ModuleService.activate("media")
+    }
+
+    GlobalShortcut {
         name: "keys"
         description: "Show every key"
         onPressed: root.island?.toggle("keys")
