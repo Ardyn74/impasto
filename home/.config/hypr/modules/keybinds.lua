@@ -141,10 +141,24 @@ bind(mainMod .. " + CTRL + up",    hl.dsp.window.move({ workspace = "-1" }), { d
 bind(mainMod .. " + CTRL + down",  hl.dsp.window.move({ workspace = "+1" }), { description = "Windows · Move the window to the next workspace" })
 
 -- · resize active column / window (25% increments)
-bind(mainMod .. " + SHIFT + left",  hl.dsp.exec_cmd("hyprctl dispatch resizeactive -25% 0"), { repeating = true, description = "Windows · Shrink window width" })
-bind(mainMod .. " + SHIFT + right", hl.dsp.exec_cmd("hyprctl dispatch resizeactive 25% 0"),  { repeating = true, description = "Windows · Expand window width" })
-bind(mainMod .. " + SHIFT + up",    hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 -25%"), { repeating = true, description = "Windows · Shrink window height" })
-bind(mainMod .. " + SHIFT + down",  hl.dsp.exec_cmd("hyprctl dispatch resizeactive 0 25%"),  { repeating = true, description = "Windows · Expand window height" })
+-- In scrolling layout, tiled windows resize horizontally via layoutmsg colresize.
+-- In other layouts (dwindle, master) or for floating windows, resizeactive is used.
+local function resize_window(w, h)
+    local workspace = hl.get_active_workspace()
+    local layout = workspace and workspace.tiled_layout
+    local window = hl.get_active_window()
+    if layout == "scrolling" and window and not window.floating and w ~= "0" then
+        local delta = w:sub(1, 1) == "-" and "-0.25" or "+0.25"
+        hl.dispatch(hl.dsp.layout("colresize " .. delta))
+    else
+        hl.dispatch(hl.dsp.exec_cmd(string.format("hyprctl dispatch resizeactive %s %s", w, h)))
+    end
+end
+
+bind(mainMod .. " + equal",         function() resize_window("25%", "0") end,  { repeating = true, description = "Windows · Expand window width" })
+bind(mainMod .. " + minus",         function() resize_window("-25%", "0") end, { repeating = true, description = "Windows · Shrink window width" })
+bind(mainMod .. " + SHIFT + equal", function() resize_window("0", "25%") end,  { repeating = true, description = "Windows · Expand window height" })
+bind(mainMod .. " + SHIFT + minus", function() resize_window("0", "-25%") end, { repeating = true, description = "Windows · Shrink window height" })
 
 -- · drag and resize with the mouse
 bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true, description = "Windows · Drag the window" })
