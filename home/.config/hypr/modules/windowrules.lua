@@ -125,7 +125,7 @@ hl.window_rule({
 hl.window_rule({
     name  = "matlab-main-tiling",
     match = {
-        class         = "^MATLAB R2025b Update.*$",
+        class         = "^MATLAB.*$",
         initial_title = "^MATLAB$",
     },
 
@@ -135,7 +135,7 @@ hl.window_rule({
 hl.window_rule({
     name  = "matlab-figures-float",
     match = {
-        class = "^MATLAB R2025b Update.*$",
+        class = "^MATLAB.*$",
         title = "^Figures$",
     },
 
@@ -146,7 +146,7 @@ hl.window_rule({
 hl.window_rule({
     name  = "matlab-opening-fix",
     match = {
-        class         = "^MATLAB R2025b Update.*$",
+        class         = "^MATLAB.*$",
         initial_title = "^Opening...$",
     },
 
@@ -157,24 +157,13 @@ hl.window_rule({
 hl.window_rule({
     name  = "matlab-addons-float",
     match = {
-        class = "^MATLAB R2025b Update.*$",
+        class = "^MATLAB.*$",
         title = "^Add-On Explorer$",
     },
 
     float  = true,
     center = true,
     size   = {1000, 800},
-})
-
-hl.window_rule({
-    name  = "aa-practices-float",
-    match = {
-        class = "^practice[0-9]+-Main$",
-        title = "^Practice [0-9]+.*$",
-    },
-
-    float  = true,
-    center = true,
 })
 
 
