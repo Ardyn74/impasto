@@ -70,6 +70,7 @@ Singleton {
     readonly property alias launcherResults: config.launcherResults
     readonly property alias launcherOrder: config.launcherOrder
     readonly property alias launcherFits: config.launcherFits
+    readonly property alias launcherGrid: config.launcherGrid
     readonly property alias emojiTone: config.emojiTone
     readonly property alias clipboardHistory: config.clipboardHistory
     readonly property alias clipboardKeep: config.clipboardKeep
@@ -579,6 +580,9 @@ Singleton {
         // list. Off by default: a list that holds still is easier to aim at.
         // `launcherResults` caps it either way.
         property bool launcherFits: false
+
+        // Display applications in an app drawer grid rather than a single column list.
+        property bool launcherGrid: true
 
         // Skin tone for emoji that have one: 0 is the default yellow, 1 to 5
         // light to dark. The person's, so it stays with the machine.

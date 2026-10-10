@@ -27,9 +27,11 @@ ColumnLayout {
     readonly property var results: LauncherService.results
     readonly property var mode: LauncherService.modeFor(LauncherService.query)
 
-    // Emoji are a grid of glyphs; every other mode is a list of rows.
-    readonly property bool grid: root.mode.id === "emoji"
-    readonly property var view: root.grid ? emojiGrid : resultList
+    // Emoji are a grid of glyphs; apps can be a grid or list; every other mode is a list of rows.
+    readonly property bool isEmojiGrid: root.mode.id === "emoji"
+    readonly property bool isAppGrid: root.mode.id === "apps" && SettingsService.launcherGrid
+    readonly property bool isGrid: root.isEmojiGrid || root.isAppGrid
+    readonly property var view: root.isEmojiGrid ? emojiGrid : (root.isAppGrid ? appGrid : resultList)
 
     // Loaded here rather than from the search, which runs inside a binding.
     onModeChanged: {
@@ -74,12 +76,12 @@ ColumnLayout {
         const count = root.results.length
         if (count === 0)
             return
-        if (root.grid) {
-            const next = emojiGrid.currentIndex + delta
+        if (root.isGrid) {
+            const next = root.view.currentIndex + delta
             if (next < 0 || next >= count)
                 return
-            emojiGrid.currentIndex = next
-            emojiGrid.positionViewAtIndex(next, GridView.Contain)
+            root.view.currentIndex = next
+            root.view.positionViewAtIndex(next, GridView.Contain)
             return
         }
         resultList.currentIndex = (resultList.currentIndex + delta + count) % count
@@ -173,21 +175,25 @@ ColumnLayout {
             selectionColor: Theme.accent
             selectedTextColor: Theme.accentText
 
+            readonly property int gridCols: root.isEmojiGrid
+                ? LauncherService.emojiColumns
+                : LauncherService.appColumns
+
             onTextEdited: LauncherService.query = text
             Keys.onReturnPressed: event => root.confirm(root.results[root.view.currentIndex], event.modifiers)
             Keys.onEnterPressed: event => root.confirm(root.results[root.view.currentIndex], event.modifiers)
-            Keys.onUpPressed: root.move(root.grid ? -LauncherService.emojiColumns : -1)
-            Keys.onDownPressed: root.move(root.grid ? LauncherService.emojiColumns : 1)
+            Keys.onUpPressed: root.move(root.isGrid ? -gridCols : -1)
+            Keys.onDownPressed: root.move(root.isGrid ? gridCols : 1)
             // In the grid the arrows move along a line; the field is a search
             // term, rarely edited in the middle.
             Keys.onLeftPressed: event => {
-                event.accepted = root.grid
-                if (root.grid)
+                event.accepted = root.isGrid
+                if (root.isGrid)
                     root.move(-1)
             }
             Keys.onRightPressed: event => {
-                event.accepted = root.grid
-                if (root.grid)
+                event.accepted = root.isGrid
+                if (root.isGrid)
                     root.move(1)
             }
             // Tab steps through the emoji groups; elsewhere it does nothing.
@@ -246,6 +252,36 @@ ColumnLayout {
                 anchors.margins: -6
                 cursorShape: Qt.PointingHandCursor
                 onClicked: EmojiService.stepTone()
+            }
+        }
+
+        // Toggle between grid and list layout in apps mode.
+        Rectangle {
+            visible: root.mode.id === "apps"
+            Layout.preferredWidth: 26
+            Layout.preferredHeight: 26
+            radius: Theme.radiusSmall
+            color: viewToggleMouse.containsMouse ? Theme.surfaceHoverIn(QsWindow.window) : "transparent"
+
+            Behavior on color { ColorAnimation { duration: Theme.durationFast } }
+
+            Text {
+                anchors.centerIn: parent
+                text: SettingsService.launcherGrid ? "󰕰" : "󰒲"
+                font.family: Theme.fontMono
+                font.pixelSize: 15
+                color: Theme.textMuted
+            }
+
+            MouseArea {
+                id: viewToggleMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    SettingsService.set("launcherGrid", !SettingsService.launcherGrid)
+                    searchField.forceActiveFocus()
+                }
             }
         }
     }
@@ -326,12 +362,12 @@ ColumnLayout {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        visible: root.grid
+        visible: root.isEmojiGrid
         clip: true
         cellWidth: LauncherService.emojiCell
         cellHeight: LauncherService.emojiCell
         model: ScriptModel {
-            values: root.grid ? root.results : []
+            values: root.isEmojiGrid ? root.results : []
 
             onValuesChanged: {
                 emojiGrid.currentIndex = 0
@@ -373,16 +409,133 @@ ColumnLayout {
         }
     }
 
+    // ── APPLICATION GRID ───────────────────────────────────────────────────
+    //
+    // All applications in an app drawer grid with large icons and titles.
+    GridView {
+        id: appGrid
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        visible: root.isAppGrid
+        clip: true
+        cellWidth: Math.floor(width / LauncherService.appColumns)
+        cellHeight: LauncherService.appCellHeight
+        model: ScriptModel {
+            values: root.isAppGrid ? root.results : []
+
+            onValuesChanged: {
+                appGrid.currentIndex = 0
+                appGrid.positionViewAtBeginning()
+            }
+        }
+        boundsBehavior: Flickable.StopAtBounds
+        currentIndex: 0
+
+        delegate: Rectangle {
+            id: appCell
+
+            required property var modelData
+            required property int index
+
+            readonly property bool selected: GridView.view.currentIndex === appCell.index
+
+            width: GridView.view.cellWidth
+            height: GridView.view.cellHeight
+            radius: Theme.radiusMedium
+            color: appCell.selected ? Theme.surfaceHoverIn(QsWindow.window) : "transparent"
+
+            Behavior on color { ColorAnimation { duration: Theme.durationFast } }
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.topMargin: 8
+                anchors.bottomMargin: 8
+                anchors.leftMargin: 6
+                anchors.rightMargin: 6
+                spacing: 6
+
+                Item {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredWidth: 44
+                    Layout.preferredHeight: 44
+
+                    readonly property string iconSource: appCell.modelData.icon
+                        ? Quickshell.iconPath(appCell.modelData.icon, true) : ""
+
+                    Image {
+                        id: gridAppIcon
+                        anchors.fill: parent
+                        source: parent.iconSource
+                        visible: parent.iconSource !== "" && status === Image.Ready
+                        sourceSize.width: 88
+                        sourceSize.height: 88
+                        fillMode: Image.PreserveAspectFit
+                        asynchronous: true
+                    }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        visible: !gridAppIcon.visible
+                        radius: Theme.radiusSmall
+                        color: Theme.surfaceIn(QsWindow.window)
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "󰀻"
+                            font.family: Theme.fontMono
+                            font.pixelSize: 22
+                            color: Theme.accent
+                        }
+                    }
+
+                    // Pinned app marker
+                    Text {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.topMargin: -2
+                        anchors.rightMargin: -4
+                        visible: LauncherService.favourites.indexOf(appCell.modelData.id) >= 0
+                        text: "󱂩"
+                        font.family: Theme.fontMono
+                        font.pixelSize: 11
+                        color: Theme.accent
+                    }
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    text: appCell.modelData.name ?? ""
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 12
+                    color: appCell.selected ? Theme.text : Theme.textMuted
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
+                    maximumLineCount: 1
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onPositionChanged: appCell.GridView.view.currentIndex = appCell.index
+                onClicked: root.run(appCell.modelData)
+            }
+        }
+    }
+
     ListView {
         id: resultList
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        visible: !root.grid
+        visible: !root.isGrid
         clip: true
         spacing: LauncherService.rowSpacing
         model: ScriptModel {
-            values: root.grid ? [] : root.results
+            values: (!root.isGrid) ? root.results : []
 
             // Back to the top once the rows have landed, not when the list
             // changes: a row inserted above the selection would shift it.

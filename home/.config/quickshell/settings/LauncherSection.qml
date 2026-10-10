@@ -40,6 +40,19 @@ SettingsSection {
         hint: Tr.t("By use ranks applications by launches, with older launches counting for less; those kept on the dock come first until something else is used more. As tall as the answer sizes the island to the results, up to the limit above; off, the box is fixed and the list scrolls.")
 
         SettingRow {
+            label: Tr.t("Layout")
+
+            SegmentedControl {
+                options: [
+                    { id: "grid", label: Tr.t("Grid") },
+                    { id: "list", label: Tr.t("List") }
+                ]
+                current: SettingsService.launcherGrid ? "grid" : "list"
+                onSelected: id => SettingsService.set("launcherGrid", id === "grid")
+            }
+        }
+
+        SettingRow {
             label: Tr.t("Order")
 
             SegmentedControl {

@@ -93,6 +93,10 @@ QtObject {
     readonly property int emojiColumns:
         Math.floor((root.panelWidth - 2 * Theme.panelPadding) / root.emojiCell)
 
+    // Application drawer grid metrics.
+    readonly property int appColumns: 5
+    readonly property int appCellHeight: 96
+
     // Field, divider, and the gap on either side of the divider, plus the
     // strip and its gap when it shows.
     readonly property int chromeHeight: root.fieldHeight + 2 * root.gap + 1
@@ -119,12 +123,24 @@ QtObject {
         return root.chromeHeight + list + 2 * Theme.panelPadding
     }
 
-    readonly property int panelWidth: 560
+    function appGridHeight(itemsCount: int): int {
+        const rowsCount = Math.max(1, Math.min(Math.ceil(itemsCount / root.appColumns), 5))
+        return root.chromeHeight + rowsCount * root.appCellHeight + 2 * Theme.panelPadding
+    }
 
-    // Fixed height with a scrolling list, or (`launcherFits`) sized to the
+    readonly property int panelWidth: 600
+
+    // Fixed height with a scrolling list/grid, or (`launcherFits`) sized to the
     // results up to `maxResults` rows.
-    readonly property int panelHeight:
-        SettingsService.launcherFits ? root.heightFor(root.rows) : 520
+    readonly property int panelHeight: {
+        if (!SettingsService.launcherFits)
+            return 540
+        if (root.showsStrip)
+            return root.heightFor(root.rows)
+        if (SettingsService.launcherGrid && root.modeFor(root.query).id === "apps")
+            return root.appGridHeight(root.results.length)
+        return root.heightFor(root.rows)
+    }
 
     // Whitelist: the expression is passed to a JavaScript evaluator.
     readonly property var arithmetic: /^[0-9+\-*/(). %]+$/
@@ -234,7 +250,7 @@ QtObject {
             return root.emoji(term)
         }
 
-        return root.rank(term).slice(0, root.maxResults)
+        return root.rank(term)
     }
 
     // All applications matching `term`, sorted by:
