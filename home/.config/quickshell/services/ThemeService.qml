@@ -42,10 +42,11 @@ QtObject {
            root.dynamicColors.accent, root.dynamicColors.text]
         : [Theme.background, Theme.surface, Theme.accent, Theme.text]
 
-    // Restores the persisted choice on startup.
+    // Restores the persisted choice on startup. De-duplicated: WallpaperService's
+    // currentProcess loads get-state once and informs setTheme directly.
     readonly property Process stateProcess: Process {
         command: [root.script, "get-state"]
-        running: true
+        running: false
         stdout: StdioCollector {
             // streamFinished, not textChanged: the collector fires per chunk
             // and JSON.parse on half a document throws.

@@ -32,15 +32,15 @@ FocusScope {
 
     // `wallpaper` or `palette`: the name the panel was opened under, so the
     // shortcut slides a panel that is already open. `shown` is the page on
-    // screen, which can also be `animated`, a page with no name of its own.
+    // screen.
     property string page: "wallpaper"
     property string shown: root.page
     onPageChanged: root.shown = root.page
 
-    readonly property var pages: ["animated", "wallpaper", "palette"]
+    readonly property var pages: ["wallpaper", "palette"]
     readonly property int shownIndex: root.pages.indexOf(root.shown)
     readonly property bool onPalette: root.shown === "palette"
-    readonly property bool onAnimated: root.shown === "animated"
+    readonly property bool onAnimated: false
 
     readonly property int gap: 12
     readonly property int tileWidth: 160
@@ -50,10 +50,10 @@ FocusScope {
     readonly property int loadReach: 8
 
     readonly property Carousel strip:
-        root.onPalette ? palettes : root.onAnimated ? animations : wallpapers
+        root.onPalette ? palettes : wallpapers
 
     readonly property var centredWallpaper: WallpaperService.wallpapers[wallpapers.current] ?? null
-    readonly property var centredAnimation: WallpaperService.animated[animations.current] ?? null
+    readonly property var centredAnimation: null
     readonly property var centredPalette: ThemeService.availableThemes[palettes.current] ?? null
 
     Component.onCompleted: {
@@ -66,21 +66,18 @@ FocusScope {
     // the list when the scan returns a moment after opening.
     readonly property int appliedWallpaper: Math.max(0, WallpaperService.wallpapers.findIndex(
         entry => entry.path === WallpaperService.chosen))
-    readonly property int appliedAnimation: Math.max(0, WallpaperService.animated.findIndex(
-        entry => entry.path === WallpaperService.chosen))
+    readonly property int appliedAnimation: 0
     readonly property int activePalette: Math.max(0, ThemeService.availableThemes.findIndex(
         entry => entry.id === ThemeService.activeId))
 
     function settle(): void {
         wallpapers.goTo(root.appliedWallpaper)
-        animations.goTo(root.appliedAnimation)
         palettes.goTo(root.activePalette)
     }
 
     Connections {
         target: WallpaperService
         function onWallpapersChanged(): void { root.settle() }
-        function onAnimatedChanged(): void { root.settle() }
         function onChosenChanged(): void { root.settle() }
     }
 
@@ -88,23 +85,18 @@ FocusScope {
         if (root.onPalette) {
             if (root.centredPalette)
                 ThemeService.setTheme(root.centredPalette.id)
-        } else if (root.onAnimated) {
-            if (root.centredAnimation)
-                WallpaperService.apply(root.centredAnimation.path)
         } else if (root.centredWallpaper) {
             WallpaperService.apply(root.centredWallpaper.path)
         }
     }
 
-    // The page `delta` away, up or down. The two named pages go through the
-    // island, so its name follows; the animated one is this panel's own.
+    // The page `delta` away, up or down.
     function turn(delta: int): void {
         const index = root.shownIndex + delta
         if (index < 0 || index >= root.pages.length)
             return
         root.shown = root.pages[index]
-        if (root.shown !== "animated")
-            root.panelRequested(root.shown === "palette" ? "palette" : "appearance")
+        root.panelRequested(root.shown === "palette" ? "palette" : "appearance")
     }
 
     // Five daubs, in the board's order: the accent and the four status hues.
@@ -157,8 +149,8 @@ FocusScope {
 
                 width: pages.width
                 height: pages.height
-                y: (1 - root.shownIndex) * pages.height
-                opacity: root.shownIndex === 1 ? 1 : 0
+                y: (0 - root.shownIndex) * pages.height
+                opacity: root.shownIndex === 0 ? 1 : 0
                 current: root.appliedWallpaper
                 model: WallpaperService.wallpapers
                 tileWidth: root.tileWidth
@@ -206,76 +198,11 @@ FocusScope {
             }
 
             Carousel {
-                id: animations
-
-                width: pages.width
-                height: pages.height
-                y: (0 - root.shownIndex) * pages.height
-                opacity: root.onAnimated ? 1 : 0
-                current: root.appliedAnimation
-                model: WallpaperService.animated
-                tileWidth: root.tileWidth
-                tileHeight: root.tileHeight
-                centreScale: root.centreScale
-                gap: root.gap
-                onActivated: root.apply()
-
-                Behavior on y { NumberAnimation { duration: Theme.durationMorph; easing.type: Theme.easing } }
-                Behavior on opacity { NumberAnimation { duration: Theme.durationMorph; easing.type: Theme.easing } }
-
-                // Each tile is the video's poster, the frame it starts from.
-                delegate: CarouselTile {
-                    id: clip
-
-                    readonly property bool applied:
-                        clip.modelData.path === WallpaperService.chosen
-
-                    ClippingRectangle {
-                        anchors.fill: parent
-                        contentUnderBorder: true
-                        radius: Theme.radiusMedium
-                        color: Theme.surfaceIn(QsWindow.window)
-                        border.color: clip.centred ? Theme.accent : Theme.borderIn(QsWindow.window)
-                        border.width: clip.centred ? 2 : 1
-
-                        Behavior on border.color { ColorAnimation { duration: Theme.durationFast } }
-
-                        Image {
-                            anchors.fill: parent
-                            source: Math.abs(clip.distance) <= root.loadReach
-                                ? `file://${clip.modelData.poster}` : ""
-                            fillMode: Image.PreserveAspectCrop
-                            asynchronous: true
-                            sourceSize.width: 320
-                            sourceSize.height: 200
-                        }
-
-                        AppliedMark { visible: clip.applied }
-                    }
-                }
-            }
-
-            // With no videos yet, where to put them.
-            Text {
-                x: (pages.width - width) / 2
-                y: animations.y + (pages.height - height) / 2
-                width: pages.width - 4 * root.gap
-                visible: WallpaperService.animated.length === 0
-                opacity: animations.opacity
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.Wrap
-                text: Tr.t("No animated wallpapers yet. Videos in ~/.local/share/wallpapers/animated show up here.")
-                font.family: Theme.fontFamily
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.textMuted
-            }
-
-            Carousel {
                 id: palettes
 
                 width: pages.width
                 height: pages.height
-                y: (2 - root.shownIndex) * pages.height
+                y: (1 - root.shownIndex) * pages.height
                 opacity: root.onPalette ? 1 : 0
                 current: root.activePalette
                 model: ThemeService.availableThemes
@@ -354,7 +281,6 @@ FocusScope {
             Text {
                 Layout.fillWidth: true
                 text: root.onPalette ? (root.centredPalette?.badge ?? "")
-                    : root.onAnimated ? (root.centredAnimation?.name ?? "")
                     : (root.centredWallpaper?.name ?? "")
                 elide: Text.ElideRight
                 font.family: Theme.fontFamily

@@ -21,9 +21,8 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    // 100 samples at 3 s: five minutes. One rate for every series keeps the
-    // time axis uniform.
-    readonly property int pollInterval: 3000
+    // 100 samples at 4 s: ~6.6 minutes.
+    readonly property int pollInterval: 4000
     readonly property int historyLength: 100
 
     property bool ready: false
@@ -67,13 +66,13 @@ Singleton {
     readonly property real swapFraction:
         root.swapTotal > 0 ? root.swapUsed / root.swapTotal : 0
 
-    // SplitParser, not StdioCollector: this stream never ends.
+    // SplitParser, not StdioCollector: this stream never ends. Paused in Game Mode.
     readonly property Process sampler: Process {
         id: sampler
 
         command: [Quickshell.shellPath("scripts/stats.py"), "watch",
                   `${root.pollInterval / 1000}`]
-        running: true
+        running: !SettingsService.gameMode
 
         stdout: SplitParser {
             splitMarker: "\n"
@@ -82,12 +81,20 @@ Singleton {
 
         // Restart after a delay, so a script that fails immediately is not
         // respawned in a tight loop.
-        onExited: revive.start()
+        onExited: if (!SettingsService.gameMode) revive.start()
+    }
+
+    readonly property Connections gameModeWatcher: Connections {
+        target: SettingsService
+        function onGameModeChanged(): void {
+            if (!SettingsService.gameMode && !sampler.running)
+                sampler.running = true
+        }
     }
 
     readonly property Timer revive: Timer {
         interval: 5000
-        onTriggered: sampler.running = true
+        onTriggered: if (!SettingsService.gameMode) sampler.running = true
     }
 
     function push(series: var, value: real): var {

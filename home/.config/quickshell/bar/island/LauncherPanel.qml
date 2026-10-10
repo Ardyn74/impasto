@@ -403,7 +403,10 @@ ColumnLayout {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onPositionChanged: cell.GridView.view.currentIndex = cell.index
+                onPositionChanged: {
+                    if (cell.GridView.view.currentIndex !== cell.index)
+                        cell.GridView.view.currentIndex = cell.index
+                }
                 onClicked: root.run(cell.modelData)
             }
         }
@@ -520,7 +523,10 @@ ColumnLayout {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onPositionChanged: appCell.GridView.view.currentIndex = appCell.index
+                onPositionChanged: {
+                    if (appCell.GridView.view.currentIndex !== appCell.index)
+                        appCell.GridView.view.currentIndex = appCell.index
+                }
                 onClicked: root.run(appCell.modelData)
             }
         }
@@ -719,7 +725,10 @@ ColumnLayout {
                 cursorShape: Qt.PointingHandCursor
                 // On movement, not hover: a row appearing under a resting
                 // pointer would otherwise steal the selection on open.
-                onPositionChanged: row.ListView.view.currentIndex = row.index
+                onPositionChanged: {
+                    if (row.ListView.view.currentIndex !== row.index)
+                        row.ListView.view.currentIndex = row.index
+                }
                 onClicked: mouse => root.confirm(row.modelData, mouse.modifiers)
             }
         }

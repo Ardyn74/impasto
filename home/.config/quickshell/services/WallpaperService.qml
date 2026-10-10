@@ -48,26 +48,13 @@ QtObject {
 
     readonly property Process scanProcess: Process {
         command: [root.script, "list-wallpapers"]
-        running: true
+        running: false
         onExited: root.scanning = false
         stdout: StdioCollector {
             onStreamFinished: {
                 const list = root.parseJson(text)
                 if (Array.isArray(list))
                     root.wallpapers = list
-            }
-        }
-    }
-
-    // Posters are made on the first listing, so this one can take a second.
-    readonly property Process animatedProcess: Process {
-        command: [root.script, "list-animated"]
-        running: true
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const list = root.parseJson(text)
-                if (Array.isArray(list))
-                    root.animated = list
             }
         }
     }
@@ -82,6 +69,8 @@ QtObject {
                     if (state.currentWallpaper)
                         root.currentWallpaper = state.currentWallpaper
                     root.currentMotion = state.currentMotion ?? ""
+                    if (state.activeTheme && ThemeService.activeId !== state.activeTheme)
+                        ThemeService.setTheme(state.activeTheme, false)
                 }
                 if (root.asked !== "") {
                     root.asked = ""
@@ -171,7 +160,6 @@ QtObject {
     function scan(): void {
         root.scanning = true
         root.scanProcess.running = true
-        root.animatedProcess.running = true
     }
 
     // ── TRANSITIONS ─────────────────────────────────────────────────────────
