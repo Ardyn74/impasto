@@ -32,6 +32,7 @@ QtObject {
     property var wallpapers: []
     // `{ name, path, poster }`, from the `animated` folder beside the stills.
     property var animated: []
+    property string activeTheme: ""
     property string currentWallpaper: ""
     property string currentMotion: ""
     property bool scanning: false
@@ -69,8 +70,8 @@ QtObject {
                     if (state.currentWallpaper)
                         root.currentWallpaper = state.currentWallpaper
                     root.currentMotion = state.currentMotion ?? ""
-                    if (state.activeTheme && ThemeService.activeId !== state.activeTheme)
-                        ThemeService.setTheme(state.activeTheme, false)
+                    if (state.activeTheme)
+                        root.activeTheme = state.activeTheme
                 }
                 if (root.asked !== "") {
                     root.asked = ""

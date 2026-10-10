@@ -87,8 +87,11 @@ Singleton {
     readonly property Connections gameModeWatcher: Connections {
         target: SettingsService
         function onGameModeChanged(): void {
-            if (!SettingsService.gameMode && !sampler.running)
+            if (SettingsService.gameMode) {
+                revive.stop()
+            } else if (!sampler.running) {
                 sampler.running = true
+            }
         }
     }
 

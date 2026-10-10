@@ -43,18 +43,12 @@ QtObject {
         : [Theme.background, Theme.surface, Theme.accent, Theme.text]
 
     // Restores the persisted choice on startup. De-duplicated: WallpaperService's
-    // currentProcess loads get-state once and informs setTheme directly.
-    readonly property Process stateProcess: Process {
-        command: [root.script, "get-state"]
-        running: false
-        stdout: StdioCollector {
-            // streamFinished, not textChanged: the collector fires per chunk
-            // and JSON.parse on half a document throws.
-            onStreamFinished: {
-                const state = root.parseJson(text, "shell state")
-                if (state && state.activeTheme)
-                    root.setTheme(state.activeTheme, false)
-            }
+    // currentProcess loads get-state once and updates activeTheme.
+    readonly property Connections wallpaperStateWatcher: Connections {
+        target: WallpaperService
+        function onActiveThemeChanged(): void {
+            if (WallpaperService.activeTheme)
+                root.setTheme(WallpaperService.activeTheme, false)
         }
     }
 
@@ -99,6 +93,8 @@ QtObject {
     Component.onCompleted: {
         root.pushTerminalFont()
         root.pushGreeting()
+        if (WallpaperService.activeTheme)
+            root.setTheme(WallpaperService.activeTheme, false)
     }
 
     // ── GREETING ────────────────────────────────────────────────────────────

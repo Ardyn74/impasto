@@ -404,7 +404,7 @@ ColumnLayout {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onPositionChanged: {
-                    if (cell.GridView.view.currentIndex !== cell.index)
+                    if (cell.GridView.view?.currentIndex !== cell.index)
                         cell.GridView.view.currentIndex = cell.index
                 }
                 onClicked: root.run(cell.modelData)
@@ -524,7 +524,7 @@ ColumnLayout {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onPositionChanged: {
-                    if (appCell.GridView.view.currentIndex !== appCell.index)
+                    if (appCell.GridView.view?.currentIndex !== appCell.index)
                         appCell.GridView.view.currentIndex = appCell.index
                 }
                 onClicked: root.run(appCell.modelData)
@@ -726,7 +726,7 @@ ColumnLayout {
                 // On movement, not hover: a row appearing under a resting
                 // pointer would otherwise steal the selection on open.
                 onPositionChanged: {
-                    if (row.ListView.view.currentIndex !== row.index)
+                    if (row.ListView.view?.currentIndex !== row.index)
                         row.ListView.view.currentIndex = row.index
                 }
                 onClicked: mouse => root.confirm(row.modelData, mouse.modifiers)
