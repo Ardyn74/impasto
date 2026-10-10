@@ -57,8 +57,10 @@ Item {
             }
 
             Item {
+                id: minuteRow
                 anchors.horizontalCenter: parent.horizontalCenter
-                implicitWidth: minuteText.implicitWidth
+                readonly property real ampmSpace: ampmStackedLabel.implicitWidth + 16
+                implicitWidth: minuteText.implicitWidth + 2 * ampmSpace
                 implicitHeight: minuteText.implicitHeight
                 width: implicitWidth
                 height: implicitHeight
@@ -77,6 +79,7 @@ Item {
                 }
 
                 Text {
+                    id: ampmStackedLabel
                     anchors.left: minuteText.right
                     anchors.leftMargin: 16
                     anchors.baseline: minuteText.baseline
