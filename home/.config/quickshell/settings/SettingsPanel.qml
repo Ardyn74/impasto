@@ -95,7 +95,7 @@ Item {
           tabs: [{ id: "arrangement", label: Tr.t("Arrangement") },
                  { id: "screen", label: Tr.t("The screen") },
                  { id: "lid", label: Tr.t("The lid") }],
-          keywords: "displays monitor screen resolution refresh scale rotate transform vrr mirror extend primary lid clamshell laptop close workspaces",
+          keywords: "displays monitor screen resolution refresh scale rotate transform mirror extend primary lid clamshell laptop close workspaces",
           page: monitorsPage },
 
         { id: "input", category: "desk", icon: "󰍽", label: Tr.t("Input"),

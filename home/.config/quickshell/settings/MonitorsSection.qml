@@ -300,17 +300,6 @@ SettingsSection {
                     onSelected: id => root.change({ transform: Number(id) })
                 }
             }
-
-            SettingRow {
-                label: Tr.t("Variable refresh")
-                locked: root.currentOff
-                reason: Tr.t("The screen is off")
-
-                ToggleSwitch {
-                    checked: (root.current?.vrr ?? 0) !== 0
-                    onToggled: checked => root.change({ vrr: checked ? 1 : 0 })
-                }
-            }
         }
 
         SettingGroup {

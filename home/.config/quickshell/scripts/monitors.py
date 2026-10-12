@@ -56,7 +56,6 @@ FIELDS = {
     "position":  ("string", POSITION),
     "scale":     ("scale", None),
     "transform": ("range", (0, 7)),
-    "vrr":       ("range", (0, 3)),
     "bitdepth":  ("choice", (8, 10)),
     "disabled":  ("bool", None),
 }
@@ -64,7 +63,7 @@ FIELDS = {
 # Fixed field order, so identical profiles produce identical chunks. `output`
 # is the only required field.
 ORDER = ("output", "disabled", "mode", "position", "scale",
-         "transform", "mirror", "vrr", "bitdepth")
+         "transform", "mirror", "bitdepth")
 
 # How `hyprctl monitors` prints an available mode: "2560x1440@144.00Hz".
 MODE_LINE = re.compile(r"(\d{1,5})x(\d{1,5})@([\d.]+)Hz")
@@ -193,7 +192,6 @@ def described(monitor, names):
         # every hotplug.
         "scale": round(monitor.get("scale") or 1, 3),
         "transform": monitor.get("transform") or 0,
-        "vrr": 1 if monitor.get("vrr") else 0,
         # hyprctl reports the mirrored monitor's id, but a rule names it; the
         # id is resolved to a name so the two compare equal.
         "mirror": names.get(str(monitor.get("mirrorOf")), "none"),

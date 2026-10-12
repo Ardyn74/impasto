@@ -233,7 +233,6 @@ Singleton {
             || (rule.scale !== undefined && Number(rule.scale) !== Number(found.scale))
             || (rule.transform !== undefined && Number(rule.transform) !== Number(found.transform))
             || (rule.mirror !== undefined && rule.mirror !== found.mirror)
-            || (rule.vrr !== undefined && Number(rule.vrr) !== Number(found.vrr))
     }
 
     function applyProfile(): void {

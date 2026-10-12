@@ -685,7 +685,7 @@ Singleton {
         //                       first, where an unset
         //                       `PanelWindow.screen` lands anyway
         //             monitors  per description: mode, position, scale,
-        //                       transform, mirror, vrr, disabled — each
+        //                       transform, mirror, disabled — each
         //                       optional, absent when unchanged
         //
         // Fields are defined by `monitors.py`.
