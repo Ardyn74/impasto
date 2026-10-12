@@ -156,3 +156,9 @@ lava() {
 
 # · machine-specific settings, outside the repository
 [[ -r ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Clear terminal screen and scrollback
+clear() {
+    command clear
+    printf '\033[3J'
+}

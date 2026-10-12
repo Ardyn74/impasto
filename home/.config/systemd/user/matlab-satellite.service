@@ -1,0 +1,15 @@
+[Unit]
+Description=XWayland Satellite for MATLAB
+BindsTo=graphical-session.target
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+Type=notify
+NotifyAccess=all
+ExecStart=/usr/bin/xwayland-satellite :12
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,22 @@
+#!/bin/bash
+LOG="$HOME/.local/state/matlab-launcher.log"
+{
+    echo "---- MATLAB launch: $(date) ----"
+    systemctl --user start matlab-satellite.service
+
+    for i in {1..20}; do
+        [ -S /tmp/.X11-unix/X12 ] && break
+        sleep 0.25
+    done
+
+    if [ ! -S /tmp/.X11-unix/X12 ]; then
+        echo "ERROR: XWayland display :12 is unavailable"
+        exit 1
+    fi
+
+    exec env \
+        DISPLAY=:12 \
+        LD_PRELOAD=/usr/lib/libstdc++.so.6 \
+        "$HOME/.local/share/MATLAB/bin/matlab" \
+        -desktop -licmode onlinelicensing
+} >> "$LOG" 2>&1

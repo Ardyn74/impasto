@@ -133,3 +133,15 @@ hl.config({
         no_donation_nag = true,
     },
 })
+
+
+-- ── SCROLLING LAYOUT ────────────────────────────────────────────────────────
+
+hl.config({
+    scrolling = {
+        fullscreen_on_one_column = false,
+        column_width             = 0.75,
+        focus_fit_method         = 0,
+        follow_focus             = true,
+    },
+})
