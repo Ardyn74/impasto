@@ -208,31 +208,30 @@ Singleton {
     // ── PARSING DUE DAYS ────────────────────────────────────────────────────
     //
     // Accepted after `@`: today, tomorrow, a weekday (next occurrence, today
-    // included), `+3`, `12/9`, `12 sep`, `sep 12` or a day key. Weekday and
-    // month names are accepted in English and Spanish.
+    // included), `+3`, `12/9`, `12 sep`, `sep 12` or a day key.
     readonly property var dayNames: [
-        ["mon", "monday", "lun", "lunes"],
-        ["tue", "tuesday", "mar", "martes"],
-        ["wed", "wednesday", "mie", "mié", "miercoles", "miércoles"],
-        ["thu", "thursday", "jue", "jueves"],
-        ["fri", "friday", "vie", "viernes"],
-        ["sat", "saturday", "sab", "sáb", "sabado", "sábado"],
-        ["sun", "sunday", "dom", "domingo"]
+        ["mon", "monday"],
+        ["tue", "tuesday"],
+        ["wed", "wednesday"],
+        ["thu", "thursday"],
+        ["fri", "friday"],
+        ["sat", "saturday"],
+        ["sun", "sunday"]
     ]
 
     readonly property var monthNames: [
-        ["jan", "january", "ene", "enero"],
-        ["feb", "february", "febrero"],
-        ["mar", "march", "marzo"],
-        ["apr", "april", "abr", "abril"],
-        ["may", "mayo"],
-        ["jun", "june", "junio"],
-        ["jul", "july", "julio"],
-        ["aug", "august", "ago", "agosto"],
-        ["sep", "sept", "september", "septiembre"],
-        ["oct", "october", "octubre"],
-        ["nov", "november", "noviembre"],
-        ["dec", "december", "dic", "diciembre"]
+        ["jan", "january"],
+        ["feb", "february"],
+        ["mar", "march"],
+        ["apr", "april"],
+        ["may"],
+        ["jun", "june"],
+        ["jul", "july"],
+        ["aug", "august"],
+        ["sep", "sept", "september"],
+        ["oct", "october"],
+        ["nov", "november"],
+        ["dec", "december"]
     ]
 
     function monthIndex(word: string): int {

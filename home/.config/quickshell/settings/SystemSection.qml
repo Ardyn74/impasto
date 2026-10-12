@@ -183,22 +183,6 @@ SettingsSection {
             VersionService.listFiles()
         }
 
-        // Strings missing from `Tr.qml` fall back to English.
-        SettingGroup {
-            title: Tr.t("This window")
-            note: Tr.t("The language of this window.")
-            hint: Tr.t("Only the settings window is translated, and anything without a translation appears in English. Files the shell writes, such as generated themes, are always in English.")
-
-            SettingRow {
-                label: Tr.t("Language")
-
-                SegmentedControl {
-                    options: Tr.languages
-                    current: SettingsService.language
-                    onSelected: id => SettingsService.set("language", id)
-                }
-            }
-        }
 
         SettingGroup {
             title: Tr.t("This machine")

@@ -120,10 +120,10 @@ Item {
           page: sessionPage },
 
         { id: "system", category: "session", icon: "󰍛", label: Tr.t("System"),
-          blurb: Tr.t("Profiles, language, this machine and reset."),
+          blurb: Tr.t("Profiles, this machine and reset."),
           tabs: [{ id: "profiles", label: Tr.t("Profiles") },
                  { id: "machine", label: Tr.t("This machine") }],
-          keywords: "system about version update updates upgrade changelog commits cpu memory uptime reset defaults language spanish english profile profiles switch rename duplicate delete import export backup file json changed files edited deleted restore wallpapers .new config dotfiles keep mine",
+          keywords: "system about version update updates upgrade changelog commits cpu memory uptime reset defaults profile profiles switch rename duplicate delete import export backup file json changed files edited deleted restore wallpapers .new config dotfiles keep mine",
           page: systemPage }
     ]
 

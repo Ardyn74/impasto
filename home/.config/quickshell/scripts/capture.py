@@ -103,16 +103,8 @@ def copy_image(path):
 
 
 def languages():
-    """The installed subset of Spanish and English for tesseract.
-
-    Language packs are separate packages, and requesting a missing one fails.
-    """
-    result = run(["tesseract", "--list-langs"])
-    if result is None or result.returncode != 0:
-        return "eng"
-    installed = {line.strip() for line in result.stdout.splitlines()[1:]}
-    wanted = [name for name in ("spa", "eng") if name in installed]
-    return "+".join(wanted) if wanted else "eng"
+    """Language for tesseract OCR (English)."""
+    return "eng"
 
 
 def read_text(path):
