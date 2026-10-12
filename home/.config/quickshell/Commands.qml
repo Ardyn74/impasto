@@ -252,7 +252,7 @@ Scope {
         target: "panel"
 
         readonly property var names: ["launcher", "controls", "overview", "appearance", "palette",
-            "stats", "session", "pet", "games", "notes", "board", "media", "keys", "packages",
+            "stats", "session", "notes", "board", "media", "keys", "packages",
             "machines", "wifi", "bluetooth", "sound", "microphone", "brightness", "nightlight"]
 
         function open(name: string): string {

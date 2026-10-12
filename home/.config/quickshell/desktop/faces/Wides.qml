@@ -45,7 +45,6 @@ Item {
         claude: claudeWide,
         codex: codexWide,
         timer: timerWide,
-        pet: petWide,
         media: mediaWide,
         clock: clockWide,
         calendar: calendarWide,
@@ -702,34 +701,7 @@ Item {
         }
     }
 
-    Component {
-        id: petWide
 
-        WidgetFace {
-
-            ink: root.ink
-            label: PetService.name !== "" ? PetService.name : "Pet"
-            reading: PetService.hatched ? `Lv ${PetService.level}` : "Egg"
-            note: PetService.moodLine
-            extraShare: 0.4
-
-            RingIndicator {
-                anchors.fill: parent
-                thickness: 3
-                progress: PetService.progress
-                trackColor: root.ink.dim
-                fillColor: root.ink.text
-            }
-
-            extra: [
-                PetFace {
-                    anchors.centerIn: parent
-                    size: 56
-                    lively: true
-                }
-            ]
-        }
-    }
 
     // ── TIME ────────────────────────────────────────────────────────────────
 
