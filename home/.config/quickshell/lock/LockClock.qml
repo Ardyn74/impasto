@@ -40,7 +40,7 @@ Item {
 
     readonly property date now: root.at !== null ? root.at : clock.date
     readonly property bool is12h: SettingsService.clockFormat.indexOf("AP") !== -1 || SettingsService.clockFormat.indexOf("ap") !== -1
-    readonly property string hour: is12h ? Qt.formatDateTime(root.now, "hh") : Qt.formatDateTime(root.now, "HH")
+    readonly property string hour: is12h ? Qt.formatDateTime(root.now, "hh AP").split(" ")[0] : Qt.formatDateTime(root.now, "HH")
     readonly property string minute: Qt.formatDateTime(root.now, "mm")
     readonly property string ampm: is12h ? Qt.formatDateTime(root.now, "AP") : ""
     // The clock's own format, split on its separator for the stacked form.

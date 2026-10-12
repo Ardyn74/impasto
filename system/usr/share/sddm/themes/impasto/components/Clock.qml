@@ -49,7 +49,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: Qt.formatDateTime(root.now, "hh")
+                text: Qt.formatDateTime(root.now, "hh AP").split(" ")[0]
                 font.family: Theme.fontDisplay
                 font.pixelSize: Theme.fontSizeClock
                 font.weight: Font.Bold
